@@ -1,13 +1,16 @@
-package com.codesophy.review.comments
+package com.codesophy.review.domain.comments
 
-import com.codesophy.review.comments.dtos.*
+import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
+import com.codesophy.review.domain.comments.dtos.CommentDto
+import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
+import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class CommentServiceImpl(
         private val commentRepository: CommentRepository
-):CommentService {
+): CommentService {
     override fun writeComment(
             writeCommentArguments: WriteCommentArguments
     ): CommentDto {

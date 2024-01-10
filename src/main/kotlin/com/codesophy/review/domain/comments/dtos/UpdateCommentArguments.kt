@@ -1,4 +1,4 @@
-package com.codesophy.review.comments.dtos
+package com.codesophy.review.domain.comments.dtos
 
 data class UpdateCommentArguments(
         val id: Long?,

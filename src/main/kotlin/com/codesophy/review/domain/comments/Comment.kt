@@ -1,4 +1,4 @@
-package com.codesophy.review.comments
+package com.codesophy.review.domain.comments
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

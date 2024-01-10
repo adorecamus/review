@@ -1,4 +1,4 @@
-package com.codesophy.review.comments
+package com.codesophy.review.domain.comments
 
 import org.springframework.data.jpa.repository.JpaRepository
 

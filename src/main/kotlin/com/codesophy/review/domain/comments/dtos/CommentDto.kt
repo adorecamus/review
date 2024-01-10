@@ -1,6 +1,6 @@
-package com.codesophy.review.comments.dtos
+package com.codesophy.review.domain.comments.dtos
 
-import com.codesophy.review.comments.Comment
+import com.codesophy.review.domain.comments.Comment
 import java.time.ZonedDateTime
 
 data class CommentDto(
@@ -10,7 +10,7 @@ data class CommentDto(
         val createdAt: ZonedDateTime
 ) {
     companion object{
-        fun from(comment: Comment): CommentDto{
+        fun from(comment: Comment): CommentDto {
             return CommentDto(
                     id = comment.id,
                     username = comment.username,
