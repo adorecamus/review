@@ -1,9 +1,6 @@
 package com.codesophy.review.comments
 
-import com.codesophy.review.comments.dtos.CommentDto
-import com.codesophy.review.comments.dtos.DeleteCommentArguments
-import com.codesophy.review.comments.dtos.UpdateCommentArguments
-import com.codesophy.review.comments.dtos.WriteCommentArguments
+import com.codesophy.review.comments.dtos.*
 
 interface CommentService {
     fun writeComment(
@@ -13,6 +10,9 @@ interface CommentService {
             updateCommentArguments: UpdateCommentArguments
     ): CommentDto
     fun deleteComment(
-            deleteCommentArguments: DeleteCommentArguments
+            commentId: Long
+    )
+    fun checkPassword(
+            checkPasswordArguments: CheckPasswordArguments
     )
 }

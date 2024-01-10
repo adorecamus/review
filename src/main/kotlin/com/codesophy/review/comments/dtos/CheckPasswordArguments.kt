@@ -1,6 +1,6 @@
 package com.codesophy.review.comments.dtos
 
-data class DeleteCommentArguments(
-        val id : Long?,
+data class CheckPasswordArguments(
+        val id: Long?,
         val password: String
 )

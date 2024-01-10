@@ -1,9 +1,6 @@
 package com.codesophy.review.comments
 
-import com.codesophy.review.comments.dtos.CommentDto
-import com.codesophy.review.comments.dtos.DeleteCommentArguments
-import com.codesophy.review.comments.dtos.UpdateCommentArguments
-import com.codesophy.review.comments.dtos.WriteCommentArguments
+import com.codesophy.review.comments.dtos.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -30,20 +27,24 @@ class CommentServiceImpl(
             commentRepository.findByIdOrNull(it)
         } ?: throw Exception("target comment is not found")
 
-        foundComment.checkAuthentication(updateCommentArguments.password)
         foundComment.changeContent(updateCommentArguments.content)
 
         commentRepository.save(foundComment)
         return CommentDto.from(foundComment)
     }
 
-    override fun deleteComment(deleteCommentArguments: DeleteCommentArguments) {
-        val foundComment = deleteCommentArguments.id?.let {
+    override fun deleteComment(commentId: Long) {
+        val foundComment = commentRepository.findByIdOrNull(commentId)
+            ?: throw Exception("target comment is not found")
+
+        commentRepository.deleteById(commentId)
+    }
+
+    override fun checkPassword(checkPasswordArguments: CheckPasswordArguments) {
+        val foundComment = checkPasswordArguments.id?.let {
             commentRepository.findByIdOrNull(it)
         } ?: throw Exception("target comment is not found")
 
-        foundComment.checkAuthentication(deleteCommentArguments.password)
-
-        commentRepository.deleteById(deleteCommentArguments.id)
+        foundComment.checkAuthentication(checkPasswordArguments.password)
     }
 }

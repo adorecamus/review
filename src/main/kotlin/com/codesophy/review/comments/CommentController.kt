@@ -1,9 +1,6 @@
 package com.codesophy.review.comments
 
-import com.codesophy.review.comments.dtos.CommentDto
-import com.codesophy.review.comments.dtos.DeleteCommentArguments
-import com.codesophy.review.comments.dtos.UpdateCommentArguments
-import com.codesophy.review.comments.dtos.WriteCommentArguments
+import com.codesophy.review.comments.dtos.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -37,8 +34,7 @@ class CommentController(
     ): ResponseEntity<CommentDto>{
         val arguments = UpdateCommentArguments(
                 id = commentId,
-                content = updateCommentArguments.content,
-                password = updateCommentArguments.password
+                content = updateCommentArguments.content
         )
         val comment = commentService.updateComment(arguments)
 
@@ -49,16 +45,26 @@ class CommentController(
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
-            @PathVariable commentId: Long,
-            @RequestBody deleteCommentArguments: DeleteCommentArguments
+            @PathVariable commentId: Long
     ): ResponseEntity<Unit>{
-        val arguments = DeleteCommentArguments(
-                id = commentId,
-                password = deleteCommentArguments.password
-        )
-        commentService.deleteComment(arguments)
+        commentService.deleteComment(commentId)
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(null)
+    }
+
+    @PostMapping("/{commentId}/password")
+    fun checkPassword(
+            @PathVariable commentId: Long,
+            @RequestBody checkPasswordArguments: CheckPasswordArguments
+    ): ResponseEntity<Unit> {
+        val arguments = CheckPasswordArguments(
+                id = commentId,
+                password = checkPasswordArguments.password
+        )
+        commentService.checkPassword(arguments)
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build()
     }
 }
