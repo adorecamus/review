@@ -4,7 +4,7 @@ import com.codesophy.review.comments.Comment
 import java.time.ZonedDateTime
 
 data class CommentDto(
-        val id: Long?,
+        var id: Long?,
         val username: String,
         val content: String,
         val createdAt: ZonedDateTime
