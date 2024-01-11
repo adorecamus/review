@@ -1,6 +1,6 @@
-package com.codesophy.review.dto
+package com.codesophy.review.domain.reviews.dto
 
-import com.codesophy.review.model.Review
+import com.codesophy.review.domain.reviews.model.Review
 import java.time.ZonedDateTime
 import java.util.Date
 

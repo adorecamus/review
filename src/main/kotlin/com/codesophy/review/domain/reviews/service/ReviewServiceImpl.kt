@@ -1,10 +1,10 @@
-package com.codesophy.review.service
+package com.codesophy.review.domain.reviews.service
 
-import com.codesophy.review.dto.ReviewResponse
-import com.codesophy.review.dto.UpdateReviewRequset
-import com.codesophy.review.exception.ModelNotFoundException
-import com.codesophy.review.model.Review
-import com.codesophy.review.repository.ReviewRepository
+import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.UpdateReviewRequset
+import com.codesophy.review.domain.exception.ModelNotFoundException
+import com.codesophy.review.domain.reviews.model.Review
+import com.codesophy.review.domain.reviews.repository.ReviewRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

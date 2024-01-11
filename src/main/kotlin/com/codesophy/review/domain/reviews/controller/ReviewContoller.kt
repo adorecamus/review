@@ -1,9 +1,9 @@
-package com.codesophy.review.controller
+package com.codesophy.review.domain.reviews.controller
 
-import com.codesophy.review.dto.ReviewResponse
-import com.codesophy.review.dto.UpdateReviewRequset
-import com.codesophy.review.exception.ModelNotFoundException
-import com.codesophy.review.service.ReviewService
+import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.UpdateReviewRequset
+import com.codesophy.review.domain.exception.ModelNotFoundException
+import com.codesophy.review.domain.reviews.service.ReviewService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping

@@ -1,6 +1,6 @@
-package com.codesophy.review.exception
+package com.codesophy.review.domain.exception
 
-import com.codesophy.review.exception.dto.ErrorResponse
+import com.codesophy.review.domain.exception.dto.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

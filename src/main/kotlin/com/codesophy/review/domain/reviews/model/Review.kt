@@ -1,4 +1,4 @@
-package com.codesophy.review.model
+package com.codesophy.review.domain.reviews.model
 
 import jakarta.persistence.*
 import java.time.ZonedDateTime
