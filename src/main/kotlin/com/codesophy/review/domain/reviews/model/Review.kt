@@ -15,8 +15,8 @@ class Review (
     @Column(name = "username")
     var username: String,
 
-    @Column(name = "create_at")
-    var createAt: ZonedDateTime = ZonedDateTime.now(),
+    @Column(name = "created_at")
+    var createdAt: ZonedDateTime = ZonedDateTime.now(),
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
