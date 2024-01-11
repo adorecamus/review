@@ -3,6 +3,7 @@ package com.codesophy.review.domain.users
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "app_user")
 class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

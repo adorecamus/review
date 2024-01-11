@@ -1,7 +1,6 @@
 package com.codesophy.review.domain.users.dtos
 
-data class SignUpDto(
+data class LoginArguments(
         val email: String,
         val password: String,
-        val username: String,
 )

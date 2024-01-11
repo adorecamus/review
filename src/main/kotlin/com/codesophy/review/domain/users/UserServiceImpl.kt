@@ -1,17 +1,45 @@
 package com.codesophy.review.domain.users
 
-import com.codesophy.review.domain.users.dtos.SignUpDto
+import com.codesophy.review.domain.users.dtos.LoginArguments
+import com.codesophy.review.domain.users.dtos.LoginDto
+import com.codesophy.review.domain.users.dtos.SignUpArguments
 import com.codesophy.review.domain.users.dtos.UserDto
+import com.codesophy.review.infra.security.jwt.JwtPlugin
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 
 @Service
 class UserServiceImpl(
-        private val userRepository: UserRepository
+        private val userRepository: UserRepository,
+        private val passwordEncoder : PasswordEncoder,
+        private val jwtPlugin: JwtPlugin
 ): UserService {
-    override fun signUp(signUpDto: SignUpDto): UserDto {
-        //  Email 중복되는지 확인, 중복된다면 throw Exception
-        //  signUpDto가 User로 변환 후 DB에 저장, 비밀번호는 저장시 암호화
-        TODO("Not yet implemented")
+    override fun login(loginArguments: LoginArguments): LoginDto {
+        val foundUser = userRepository.findByEmail(loginArguments.email) ?: throw Exception("not found")
+
+        if (!passwordEncoder.matches(loginArguments.password, foundUser.password) ) {
+            throw Exception("not found")
+        }
+
+        return LoginDto(
+                accessToken = jwtPlugin.generateAccessToken(
+                        subject = foundUser.id.toString(),
+                        email = foundUser.email
+                )
+        )
+    }
+
+    override fun signUp(signUpArguments: SignUpArguments): UserDto {
+        if (userRepository.existsByEmail(signUpArguments.email)) {
+            throw Exception("Email is already in use")
+        }
+
+        val result = userRepository.save(User(
+                email = signUpArguments.email,
+                password = passwordEncoder.encode(signUpArguments.password),// 암호화
+                username = signUpArguments.username
+        ))
+        return UserDto.to(result)
     }
 }
