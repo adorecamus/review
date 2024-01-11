@@ -4,6 +4,7 @@ import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
+import com.codesophy.review.domain.pagination.PageResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -49,5 +50,9 @@ class CommentServiceImpl(
         } ?: throw Exception("target comment is not found")
 
         foundComment.checkAuthentication(checkPasswordArguments.password)
+    }
+
+    override fun getPaginatedCommentList(pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {
+        TODO("Not yet implemented")
     }
 }
