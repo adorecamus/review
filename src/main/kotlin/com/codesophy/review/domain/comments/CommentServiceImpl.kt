@@ -4,13 +4,13 @@ import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
+import com.codesophy.review.domain.comments.repository.ICommentRepository
 import com.codesophy.review.domain.pagination.PageResponse
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class CommentServiceImpl(
-        private val commentRepository: CommentRepository
+        private val commentRepository: ICommentRepository
 ): CommentService {
     override fun writeComment(
             writeCommentArguments: WriteCommentArguments
