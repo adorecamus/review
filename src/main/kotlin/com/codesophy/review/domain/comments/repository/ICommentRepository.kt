@@ -9,4 +9,8 @@ interface ICommentRepository {
     fun findByIdOrNull(id: Long): Comment?
 
     fun deleteById(id: Long)
+
+    fun getListByPageNumberAndPageSize(pageNumber: Int, pageSize: Int): List<Comment>
+
+    fun getTotalPages(pageSize: Int): Int
 }

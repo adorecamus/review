@@ -53,6 +53,13 @@ class CommentServiceImpl(
     }
 
     override fun getPaginatedCommentList(pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {
-        TODO("Not yet implemented")
+        val totalPages = commentRepository.getTotalPages(pageSize)
+
+        return PageResponse(
+                dtoList = commentRepository.getListByPageNumberAndPageSize(pageNumber, pageSize)
+                            .map { CommentDto.from(it) },
+                totalPages = totalPages
+        )
     }
+
 }
