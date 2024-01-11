@@ -2,8 +2,12 @@ package com.codesophy.review.controller
 
 import com.codesophy.review.dto.ReviewResponse
 import com.codesophy.review.dto.UpdateReviewRequset
+import com.codesophy.review.exception.ModelNotFoundException
+import com.codesophy.review.service.ReviewService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,21 +15,41 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 
-@RequestMapping("/review")
+@RequestMapping("/reviews")
 @RestController
-class ReviewContoller {
+class ReviewContoller(
+    private val reviewService: ReviewService
+) {
 
     @PutMapping("/{reveiwId}")
     fun updateReview(
-        @PathVariable courseId: Long,
+        @PathVariable reviewId: Long,
         @RequestBody updateReviewRequset: UpdateReviewRequset
-    ) :ResponseEntity<ReviewResponse> {
-        TODO()
+    ) : ResponseEntity<ReviewResponse> {
+        val requset = UpdateReviewRequset(
+            id = reviewId,
+            title = updateReviewRequset.title,
+            content = updateReviewRequset.content,
+            username = updateReviewRequset.username
+        )
+
+        val review: ReviewResponse = reviewService.updateReview(reviewId, requset)
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(review)
     }
 
 
     @DeleteMapping("/{reveiwId}")
-    fun deleteReview(@PathVariable courseId: Long){
-        TODO()
+    fun deleteReview(@PathVariable reviewId: Long):ResponseEntity<Unit>{
+        reviewService.deleteReview(reviewId)
+
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(null)
     }
+
+
+
 }
