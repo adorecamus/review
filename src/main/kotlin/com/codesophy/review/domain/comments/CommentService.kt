@@ -5,6 +5,7 @@ import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
+import com.codesophy.review.domain.pagination.PageResponse
 
 interface CommentService {
     fun writeComment(
@@ -19,4 +20,7 @@ interface CommentService {
     fun checkPassword(
             checkPasswordArguments: CheckPasswordArguments
     )
+    fun getPaginatedCommentList(
+            pageNumber: Int, pageSize: Int
+    ): PageResponse<CommentDto>
 }
