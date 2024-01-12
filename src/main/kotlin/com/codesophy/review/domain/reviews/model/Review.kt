@@ -7,6 +7,10 @@ import org.hibernate.annotations.CreationTimestamp
 @Entity
 @Table(name = "review")
 class Review(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
     @Column(name = "title")
     var title: String,
 
@@ -22,10 +26,4 @@ class Review(
     @CreationTimestamp
     @Column
     val createdAt: ZonedDateTime = ZonedDateTime.now()
-
-) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-
-}
+)

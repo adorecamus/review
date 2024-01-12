@@ -1,8 +1,9 @@
 package com.codesophy.review.domain.reviews.service
 
+import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
-import com.codesophy.review.domain.reviews.dto.UpdateReviewRequset
+import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
 import com.codesophy.review.domain.reviews.model.Review
 import com.codesophy.review.domain.reviews.repository.ReviewRepository
 import org.springframework.stereotype.Service
@@ -10,15 +11,14 @@ import org.springframework.stereotype.Service
 @Service
 class ReviewServiceImpl(
     val reviewRepository: ReviewRepository
-): ReviewService {
-  
+) : ReviewService {
+
     override fun getAllReviewList(): List<ReviewResponse> {
-        return reviewRepository.findAll().map {ReviewResponse.from(it)}
+        return reviewRepository.findAll().map { ReviewResponse.from(it) }
     }
 
-    override fun getReviewById(reviewId: Long): ReviewResponse{
-        val review = reviewRepository.findByIdOrNull(reviewId)?:throw Exception("dkald"
-        )
+    override fun getReviewById(reviewId: Long): ReviewResponse {
+        val review = reviewRepository.findByIdOrIdNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
         return ReviewResponse.from(review)
     }
@@ -35,8 +35,8 @@ class ReviewServiceImpl(
         return ReviewResponse.from(review)
     }
 
-    override fun updateReview(reviewId: Long, reviewRequset: UpdateReviewRequset): ReviewResponse {
-        val savedReview = reviewRepository.save(reviewRequset.to())
+    override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
+        val savedReview = reviewRepository.save(request.to())
 
         return ReviewResponse.from(savedReview)
     }

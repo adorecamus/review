@@ -2,6 +2,7 @@ package com.codesophy.review.domain.reviews.controller
 
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
 import com.codesophy.review.domain.reviews.service.ReviewService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +21,7 @@ class ReviewController(
     }
     //Review 단건 조회
 
-    @GetMapping()
+    @GetMapping
     fun getReviewList(): ResponseEntity<List<ReviewResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -36,5 +37,33 @@ class ReviewController(
     }
     //Review 생성
 
+    @PutMapping("/{reviewId}")
+    fun updateReview(
+        @PathVariable reviewId: Long,
+        @RequestBody updateReviewRequest: UpdateReviewRequest
+    ) : ResponseEntity<ReviewResponse> {
+        val request = UpdateReviewRequest(
+            id = reviewId,
+            title = updateReviewRequest.title,
+            content = updateReviewRequest.content,
+            username = updateReviewRequest.username,
+            password = updateReviewRequest.password
+        )
+
+        val review: ReviewResponse = reviewService.updateReview(reviewId, request)
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(review)
+    }
+
+    @DeleteMapping("/{reviewId}")
+    fun deleteReview(@PathVariable reviewId: Long):ResponseEntity<Unit>{
+        reviewService.deleteReview(reviewId)
+
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(null)
+    }
 
 }

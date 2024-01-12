@@ -8,7 +8,7 @@ data class ReviewResponse(
     val title: String,
     val content: String,
     val username: String,
-    val createdAt: ZonedDateTime = ZonedDateTime.now()
+    val createdAt: ZonedDateTime
 ) {
     companion object{
         fun from(review: Review): ReviewResponse {

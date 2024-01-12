@@ -5,6 +5,7 @@ import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
 import com.codesophy.review.domain.comments.repository.ICommentRepository
+import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.PageResponse
 import org.springframework.stereotype.Service
 
@@ -29,7 +30,7 @@ class CommentServiceImpl(
     ): CommentDto {
         val foundComment = updateCommentArguments.id?.let {
             commentRepository.findByIdOrNull(it)
-        } ?: throw Exception("target comment is not found")
+        } ?: throw ModelNotFoundException("Comment", updateCommentArguments.id)
 
         foundComment.changeContent(updateCommentArguments.content)
 
@@ -39,7 +40,7 @@ class CommentServiceImpl(
 
     override fun deleteComment(commentId: Long) {
         val foundComment = commentRepository.findByIdOrNull(commentId)
-            ?: throw Exception("target comment is not found")
+            ?: throw ModelNotFoundException("Comment", commentId)
 
         commentRepository.deleteById(commentId)
     }
@@ -47,7 +48,7 @@ class CommentServiceImpl(
     override fun checkPassword(checkPasswordArguments: CheckPasswordArguments) {
         val foundComment = checkPasswordArguments.id?.let {
             commentRepository.findByIdOrNull(it)
-        } ?: throw Exception("target comment is not found")
+        } ?: throw ModelNotFoundException("Comment", checkPasswordArguments.id)
 
         foundComment.checkAuthentication(checkPasswordArguments.password)
     }
