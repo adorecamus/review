@@ -5,12 +5,12 @@ import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
 import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
 import com.codesophy.review.domain.reviews.model.Review
-import com.codesophy.review.domain.reviews.repository.ReviewRepository
+import com.codesophy.review.domain.reviews.repository.IReviewRepository
 import org.springframework.stereotype.Service
 
 @Service
 class ReviewServiceImpl(
-    val reviewRepository: ReviewRepository
+    val reviewRepository: IReviewRepository
 ) : ReviewService {
 
     override fun getAllReviewList(): List<ReviewResponse> {
