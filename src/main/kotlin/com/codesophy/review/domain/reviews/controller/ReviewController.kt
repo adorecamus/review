@@ -1,15 +1,11 @@
 package com.codesophy.review.domain.reviews.controller
 
 import com.codesophy.review.domain.pagination.CursorResponse
-import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
-import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
-import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
+import com.codesophy.review.domain.reviews.dto.*
 import com.codesophy.review.domain.reviews.service.ReviewService
 import com.codesophy.review.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -89,12 +85,21 @@ class ReviewController(
 
     @GetMapping("/newsfeed")
     fun getPaginatedReviewList(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestParam cursorId: Long?,
-        @RequestParam(defaultValue = "15") pageSize: Int
+        @RequestParam(defaultValue = "15") pageSize: Int,
+        reviewFeedArguments: ReviewFeedArguments
     ): ResponseEntity<CursorResponse<ReviewResponse>> {
+
+        val arguments = ReviewFeedArguments(
+            userId = userPrincipal.id,
+            title = reviewFeedArguments.title,
+            nickname = reviewFeedArguments.nickname
+        )
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(reviewService.getPaginatedReviewList(cursorId, pageSize))
+            .body(reviewService.getPaginatedReviewList(cursorId, pageSize, arguments))
     }
 
 }
