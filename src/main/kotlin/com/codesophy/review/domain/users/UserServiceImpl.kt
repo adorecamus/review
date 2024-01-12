@@ -1,5 +1,7 @@
 package com.codesophy.review.domain.users
 
+import com.codesophy.review.domain.exception.InvalidCredentialException
+import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.users.dtos.LoginArguments
 import com.codesophy.review.domain.users.dtos.LoginDto
 import com.codesophy.review.domain.users.dtos.SignUpArguments
@@ -16,10 +18,10 @@ class UserServiceImpl(
         private val jwtPlugin: JwtPlugin
 ): UserService {
     override fun login(loginArguments: LoginArguments): LoginDto {
-        val foundUser = userRepository.findByEmail(loginArguments.email) ?: throw Exception("not found")
+        val foundUser = userRepository.findByEmail(loginArguments.email) ?: throw ModelNotFoundException("User", null)
 
         if (!passwordEncoder.matches(loginArguments.password, foundUser.password) ) {
-            throw Exception("not found")
+            throw InvalidCredentialException()
         }
 
         return LoginDto(
