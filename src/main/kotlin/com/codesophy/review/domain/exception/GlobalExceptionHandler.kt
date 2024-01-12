@@ -28,4 +28,11 @@ class GlobalExceptionHandler {
             .status(HttpStatus.UNAUTHORIZED)
             .body(ErrorResponse(message = e.message))
     }
+
+    @ExceptionHandler(ForbiddenException::class)
+    fun handleIllegalStateException(e: ForbiddenException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(ErrorResponse(message = e.message))
+    }
 }
