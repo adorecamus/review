@@ -1,5 +1,6 @@
 package com.codesophy.review.domain.reviews.model
 
+import com.codesophy.review.domain.comments.Comment
 import jakarta.persistence.*
 import java.time.ZonedDateTime
 import org.hibernate.annotations.CreationTimestamp
@@ -22,6 +23,9 @@ class Review(
 
     @Column
     val password: String,
+
+    @OneToMany(mappedBy = "review")
+    var comments : List<Comment> = emptyList(),
 
     @CreationTimestamp
     @Column
