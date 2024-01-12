@@ -32,13 +32,13 @@ class UserServiceImpl(
 
     override fun signUp(signUpArguments: SignUpArguments): UserDto {
         if (userRepository.existsByEmail(signUpArguments.email)) {
-            throw Exception("Email is already in use")
+            throw IllegalStateException("Email is already in use")
         }
 
         val result = userRepository.save(User(
                 email = signUpArguments.email,
                 password = passwordEncoder.encode(signUpArguments.password),// 암호화
-                username = signUpArguments.username
+                nickname = signUpArguments.nickname
         ))
         return UserDto.to(result)
     }
