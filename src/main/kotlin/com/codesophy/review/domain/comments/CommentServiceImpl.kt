@@ -1,30 +1,37 @@
 package com.codesophy.review.domain.comments
 
 import com.codesophy.review.domain.comments.dtos.CommentDto
+import com.codesophy.review.domain.comments.dtos.DeleteCommentArgument
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
 import com.codesophy.review.domain.comments.repository.CommentJpaRepository
 import com.codesophy.review.domain.comments.repository.ICommentRepository
+import com.codesophy.review.domain.exception.ForbiddenException
 import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.PageResponse
 import com.codesophy.review.domain.reviews.repository.ReviewJpaRepository
+import com.codesophy.review.domain.users.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class CommentServiceImpl(
         private val commentRepository: ICommentRepository,
-        private val commentJpaRepository: CommentJpaRepository,
         private val reviewJpaRepository: ReviewJpaRepository,
+        private val userRepository: UserRepository
 ): CommentService {
     override fun writeComment(
             reviewId: Long,
-            writeCommentArguments: WriteCommentArguments
+            request: WriteCommentArguments
     ): CommentDto {
+        val user = request.userId?.let {
+            userRepository.findByIdOrNull(it)
+        } ?: throw ModelNotFoundException("UserId", request.userId)
+
         val review = reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
         val comment = Comment(
-                username = writeCommentArguments.username,
-                content = writeCommentArguments.content,
+                content = request.content,
+                user = user,
                 review = review
         )
         val result = commentRepository.save(comment)
@@ -33,24 +40,32 @@ class CommentServiceImpl(
 
     override fun updateComment(
             reviewId: Long,
-            updateCommentArguments: UpdateCommentArguments
+            request: UpdateCommentArguments
     ): CommentDto {
         reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
-        val foundComment = updateCommentArguments.id?.let {
+        val foundComment = request.id?.let {
             commentRepository.findByIdOrNull(it)
-        } ?: throw ModelNotFoundException("Comment", updateCommentArguments.id)
+        } ?: throw ModelNotFoundException("Comment", request.id)
 
-        foundComment.changeContent(updateCommentArguments.content)
+        if(!foundComment.compareUserIdWith(request.userId!!)){
+            throw ForbiddenException(request.userId, "UserId", request.id)
+        }
+        foundComment.changeContent(request.content)
 
         commentRepository.save(foundComment)
         return CommentDto.from(foundComment)
     }
 
-    override fun deleteComment(reviewId: Long, commentId: Long) {
-        commentJpaRepository.findByReviewIdAndId(reviewId, commentId)
-            ?: throw ModelNotFoundException("Comment", commentId)
+    override fun deleteComment(request: DeleteCommentArgument) {
+        val foundComment = request.id?.let {
+            commentRepository.findByIdOrNull(it)
+        } ?: throw ModelNotFoundException("Comment", request.id)
 
-        commentRepository.deleteById(commentId)
+        if(!foundComment.compareUserIdWith(request.userId!!)){
+            throw ForbiddenException(request.userId, "UserId", request.id)
+        }
+
+        commentRepository.deleteById(foundComment.id!!)
     }
 
     override fun getPaginatedCommentList(reviewId: Long, pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {
