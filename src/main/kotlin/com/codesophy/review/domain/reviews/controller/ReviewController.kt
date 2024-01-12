@@ -48,7 +48,6 @@ class ReviewController(
             title = updateReviewRequest.title,
             content = updateReviewRequest.content,
             username = updateReviewRequest.username,
-            password = updateReviewRequest.password
         )
 
         val review: ReviewResponse = reviewService.updateReview(reviewId, request)

@@ -4,5 +4,4 @@ data class CreateReviewRequest(
     val title: String,
     val content: String,
     val username: String,
-    val password: String
 )

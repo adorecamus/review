@@ -30,7 +30,6 @@ class ReviewServiceImpl(
                 title = request.title,
                 content = request.content,
                 username = request.username,
-                password = request.password
             )
         )
         return ReviewResponse.from(review)

@@ -21,8 +21,6 @@ class Comment(
         var content: String,
         @Column
         val username: String,
-        @Column
-        val password: String,
         @ManyToOne
         var review : Review
 ){
@@ -33,10 +31,5 @@ class Comment(
 
         fun changeContent(content: String){
                 this.content = content
-        }
-        fun checkAuthentication(password: String){
-                if (password != this.password) {
-                        throw Exception("wrong authentication not comment")
-                }
         }
 }

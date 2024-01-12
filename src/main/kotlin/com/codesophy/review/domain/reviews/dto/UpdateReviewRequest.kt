@@ -7,7 +7,6 @@ data class UpdateReviewRequest(
     val title:String,
     val content: String,
     val username: String,
-    val password: String
 ) {
     fun to(): Review {
         return Review(
@@ -15,7 +14,6 @@ data class UpdateReviewRequest(
             title = title,
             content = content,
             username = username,
-            password = password
         )
     }
 }

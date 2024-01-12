@@ -21,9 +21,6 @@ class Review(
     @Column(name = "username")
     var username: String,
 
-    @Column
-    val password: String,
-
     @OneToMany(mappedBy = "review")
     var comments : List<Comment> = emptyList(),
 
