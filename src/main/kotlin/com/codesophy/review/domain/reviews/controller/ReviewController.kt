@@ -50,7 +50,6 @@ class ReviewController(
     }
     //Review 생성
 
-    @PreAuthorize("#updateReviewRequest.userId == authentication.principal.id") // request에서 userId를 받는 방식
     @PutMapping("/{reviewId}")
     fun updateReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,

@@ -51,6 +51,10 @@ class ReviewServiceImpl(
             reviewRepository.findByIdOrIdNull(it)
         } ?: throw ModelNotFoundException("Review", request.id)
 
+        if (!foundReview.compareUserIdWith(request.userId!!)) {
+            throw ForbiddenException(request.userId, "Review", request.id)
+        }
+
         foundReview.changeTitleAndContent(request.title, request.content)
         reviewRepository.save(foundReview)
 
