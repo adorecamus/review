@@ -1,6 +1,7 @@
 package com.codesophy.review.domain.reviews.model
 
 import com.codesophy.review.domain.comments.Comment
+import com.codesophy.review.domain.users.User
 import jakarta.persistence.*
 import java.time.ZonedDateTime
 import org.hibernate.annotations.CreationTimestamp
@@ -18,8 +19,9 @@ class Review(
     @Column(name = "content")
     var content: String,
 
-    @Column(name = "username")
-    var username: String,
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User,
 
     @OneToMany(mappedBy = "review")
     var comments : List<Comment> = emptyList(),
@@ -27,4 +29,14 @@ class Review(
     @CreationTimestamp
     @Column
     val createdAt: ZonedDateTime = ZonedDateTime.now()
-)
+) {
+
+    fun changeTitleAndContent(title: String, content: String) {
+        this.title = title
+        this.content = content
+    }
+
+    fun compareUserIdWith(userId: Long): Boolean {
+        return user.id == userId
+    }
+}

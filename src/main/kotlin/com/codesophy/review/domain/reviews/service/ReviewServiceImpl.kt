@@ -1,17 +1,22 @@
 package com.codesophy.review.domain.reviews.service
 
+import com.codesophy.review.domain.exception.ForbiddenException
 import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.CursorResponse
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
+import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
 import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
 import com.codesophy.review.domain.reviews.model.Review
 import com.codesophy.review.domain.reviews.repository.IReviewRepository
+import com.codesophy.review.domain.users.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class ReviewServiceImpl(
-    val reviewRepository: IReviewRepository
+    private val reviewRepository: IReviewRepository,
+    private val userRepository: UserRepository
 ) : ReviewService {
 
     override fun getAllReviewList(): List<ReviewResponse> {
@@ -25,24 +30,44 @@ class ReviewServiceImpl(
     }
 
     override fun createReview(request: CreateReviewRequest): ReviewResponse {
+
+        val user = request.userId?.let {
+            userRepository.findByIdOrNull(it)
+        } ?: throw ModelNotFoundException("User", request.userId)
+
         val review = reviewRepository.save(
             Review(
                 title = request.title,
                 content = request.content,
-                username = request.username,
+                user = user
             )
         )
         return ReviewResponse.from(review)
     }
 
-    override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
-        val savedReview = reviewRepository.save(request.to())
+    override fun updateReview(request: UpdateReviewRequest): ReviewResponse {
 
-        return ReviewResponse.from(savedReview)
+        val foundReview = request.id?.let {
+            reviewRepository.findByIdOrIdNull(it)
+        } ?: throw ModelNotFoundException("Review", request.id)
+
+        foundReview.changeTitleAndContent(request.title, request.content)
+        reviewRepository.save(foundReview)
+
+        return ReviewResponse.from(foundReview)
     }
 
-    override fun deleteReview(reviewId: Long) {
-        reviewRepository.deleteById(reviewId)
+    override fun deleteReview(request: DeleteReviewRequest) {
+
+        val foundReview = request.id?.let {
+            reviewRepository.findByIdOrIdNull(it)
+        } ?: throw ModelNotFoundException("Review", request.id)
+
+        if (!foundReview.compareUserIdWith(request.userId)) {
+            throw ForbiddenException(request.userId, "Review", request.id)
+        }
+
+        reviewRepository.deleteById(foundReview.id!!)
     }
 
     override fun getPaginatedReviewList(cursorId: Long?, pageSize: Int): CursorResponse<ReviewResponse> {

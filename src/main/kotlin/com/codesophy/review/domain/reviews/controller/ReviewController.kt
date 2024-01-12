@@ -2,11 +2,15 @@ package com.codesophy.review.domain.reviews.controller
 
 import com.codesophy.review.domain.pagination.CursorResponse
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
+import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
 import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
 import com.codesophy.review.domain.reviews.service.ReviewService
+import com.codesophy.review.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -31,15 +35,25 @@ class ReviewController(
     //Review 목록 조회
 
     @PostMapping
-    fun createReview(@RequestBody createReviewRequest: CreateReviewRequest): ResponseEntity<ReviewResponse> {
+    fun createReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestBody createReviewRequest: CreateReviewRequest
+    ): ResponseEntity<ReviewResponse> {
+        val request = CreateReviewRequest(
+            title = createReviewRequest.title,
+            content = createReviewRequest.content,
+            userId = userPrincipal.id
+        )
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(reviewService.createReview(createReviewRequest))
+            .body(reviewService.createReview(request))
     }
     //Review 생성
 
+    @PreAuthorize("#updateReviewRequest.userId == authentication.principal.id") // request에서 userId를 받는 방식
     @PutMapping("/{reviewId}")
     fun updateReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long,
         @RequestBody updateReviewRequest: UpdateReviewRequest
     ) : ResponseEntity<ReviewResponse> {
@@ -47,10 +61,10 @@ class ReviewController(
             id = reviewId,
             title = updateReviewRequest.title,
             content = updateReviewRequest.content,
-            username = updateReviewRequest.username,
+            userId = userPrincipal.id
         )
 
-        val review: ReviewResponse = reviewService.updateReview(reviewId, request)
+        val review: ReviewResponse = reviewService.updateReview(request)
 
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -58,8 +72,16 @@ class ReviewController(
     }
 
     @DeleteMapping("/{reviewId}")
-    fun deleteReview(@PathVariable reviewId: Long):ResponseEntity<Unit>{
-        reviewService.deleteReview(reviewId)
+    fun deleteReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable reviewId: Long
+    ): ResponseEntity<Unit> {
+        val request = DeleteReviewRequest(
+            id = reviewId,
+            userId = userPrincipal.id
+        )
+
+        reviewService.deleteReview(request)
 
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)

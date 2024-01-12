@@ -7,7 +7,7 @@ data class ReviewResponse(
     val id: Long?,
     val title: String,
     val content: String,
-    val username: String,
+    val nickname: String,
     val createdAt: ZonedDateTime
 ) {
     companion object{
@@ -16,7 +16,7 @@ data class ReviewResponse(
                 id = review.id,
                 title = review.title,
                 content = review.content,
-                username = review.username,
+                nickname = review.user.nickname,
                 createdAt = review.createdAt
             )
         }
