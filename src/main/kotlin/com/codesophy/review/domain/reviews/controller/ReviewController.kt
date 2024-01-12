@@ -1,5 +1,6 @@
 package com.codesophy.review.domain.reviews.controller
 
+import com.codesophy.review.domain.pagination.CursorResponse
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
 import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
@@ -64,6 +65,16 @@ class ReviewController(
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .body(null)
+    }
+
+    @GetMapping
+    fun getPaginatedReviewList(
+        @RequestParam cursorId: Long?,
+        @RequestParam(defaultValue = "15") pageSize: Int
+    ): ResponseEntity<CursorResponse<ReviewResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(TODO())
     }
 
 }
