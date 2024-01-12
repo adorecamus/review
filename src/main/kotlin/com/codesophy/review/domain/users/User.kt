@@ -9,9 +9,9 @@ class User(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long? = null,
         @Column
-        var username: String,
-        @Column
         val email: String,
         @Column
         val password: String,
+        @Column
+        var nickname: String
 )
