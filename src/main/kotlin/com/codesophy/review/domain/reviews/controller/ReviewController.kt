@@ -67,7 +67,7 @@ class ReviewController(
             .body(null)
     }
 
-    @GetMapping
+    @GetMapping("/newsfeed")
     fun getPaginatedReviewList(
         @RequestParam cursorId: Long?,
         @RequestParam(defaultValue = "15") pageSize: Int
