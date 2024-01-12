@@ -12,14 +12,13 @@ data class ReviewResponse(
 ) {
     companion object{
         fun from(review: Review): ReviewResponse {
-                return ReviewResponse(
-                    id = review.id,
-                    title = review.title,
-                    content = review.content,
-                    username = review.username,
-                    createdAt = review.createdAt
-                )
+            return ReviewResponse(
+                id = review.id,
+                title = review.title,
+                content = review.content,
+                username = review.username,
+                createdAt = review.createdAt
+            )
         }
     }
 }
-
