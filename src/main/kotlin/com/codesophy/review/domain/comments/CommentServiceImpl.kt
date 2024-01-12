@@ -1,6 +1,5 @@
 package com.codesophy.review.domain.comments
 
-import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
@@ -25,7 +24,6 @@ class CommentServiceImpl(
         val review = reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
         val comment = Comment(
                 username = writeCommentArguments.username,
-                password = writeCommentArguments.password,
                 content = writeCommentArguments.content,
                 review = review
         )
@@ -53,15 +51,6 @@ class CommentServiceImpl(
             ?: throw ModelNotFoundException("Comment", commentId)
 
         commentRepository.deleteById(commentId)
-    }
-
-    override fun checkPassword(reviewId: Long, checkPasswordArguments: CheckPasswordArguments) {
-        reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
-        val foundComment = checkPasswordArguments.id?.let {
-            commentRepository.findByIdOrNull(it)
-        } ?: throw ModelNotFoundException("Comment", checkPasswordArguments.id)
-
-        foundComment.checkAuthentication(checkPasswordArguments.password)
     }
 
     override fun getPaginatedCommentList(reviewId: Long, pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {

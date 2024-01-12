@@ -1,7 +1,6 @@
 package com.codesophy.review.domain.comments
 
 
-import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
@@ -19,10 +18,6 @@ interface CommentService {
     fun deleteComment(
             reviewId: Long,
             commentId: Long
-    )
-    fun checkPassword(
-            reviewId: Long,
-            checkPasswordArguments: CheckPasswordArguments
     )
     fun getPaginatedCommentList(
             reviewId: Long,
