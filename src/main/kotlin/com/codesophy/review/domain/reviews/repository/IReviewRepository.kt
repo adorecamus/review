@@ -11,4 +11,6 @@ interface IReviewRepository {
     fun save(review: Review): Review
 
     fun deleteById(id: Long)
+
+    fun getLimitedReviewsLessThanId(id: Long?, size: Int): List<Review>
 }

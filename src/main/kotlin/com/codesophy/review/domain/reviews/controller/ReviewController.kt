@@ -74,7 +74,7 @@ class ReviewController(
     ): ResponseEntity<CursorResponse<ReviewResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(TODO())
+            .body(reviewService.getPaginatedReviewList(cursorId, pageSize))
     }
 
 }
