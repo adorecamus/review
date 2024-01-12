@@ -1,20 +1,19 @@
 package com.codesophy.review.domain.reviews.model
 
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
 import jakarta.persistence.*
-import org.hibernate.annotations.CreationTimestamp
 import java.time.ZonedDateTime
+import org.hibernate.annotations.CreationTimestamp
 
 @Entity
 @Table(name = "review")
 class Review(
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     var title: String,
 
-    @Column(name = "content",nullable = false)
+    @Column(name = "content")
     var content: String,
 
-    @Column(name = "username",nullable = false)
+    @Column(name = "username")
     var username: String,
 
     @Column

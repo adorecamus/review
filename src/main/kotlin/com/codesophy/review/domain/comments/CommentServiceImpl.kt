@@ -4,12 +4,13 @@ import com.codesophy.review.domain.comments.dtos.CheckPasswordArguments
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
-import org.springframework.data.repository.findByIdOrNull
+import com.codesophy.review.domain.comments.repository.ICommentRepository
+import com.codesophy.review.domain.pagination.PageResponse
 import org.springframework.stereotype.Service
 
 @Service
 class CommentServiceImpl(
-        private val commentRepository: CommentRepository
+        private val commentRepository: ICommentRepository
 ): CommentService {
     override fun writeComment(
             writeCommentArguments: WriteCommentArguments
@@ -50,4 +51,29 @@ class CommentServiceImpl(
 
         foundComment.checkAuthentication(checkPasswordArguments.password)
     }
+
+    override fun getPaginatedCommentList(pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {
+        validatePageRequest(pageNumber, pageSize)
+
+        val totalPages = commentRepository.getTotalPages(pageSize)
+        if (pageNumber > totalPages) {
+            throw IllegalArgumentException("Page number must not be greater than total pages")
+        }
+
+        return PageResponse(
+                dtoList = commentRepository.getListByPageNumberAndPageSize(pageNumber, pageSize)
+                            .map { CommentDto.from(it) },
+                totalPages = totalPages
+        )
+    }
+
+    private fun validatePageRequest(pageNumber: Int, pageSize: Int) {
+        if (pageNumber < 1) {
+            throw IllegalArgumentException("Page number must not be less than one")
+        }
+        if (pageSize < 1) {
+            throw IllegalArgumentException("Page size must not be less than one")
+        }
+    }
+
 }

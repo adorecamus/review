@@ -2,15 +2,16 @@ package com.codesophy.review.domain.reviews.service
 
 import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
 import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.UpdateReviewRequset
 import com.codesophy.review.domain.reviews.model.Review
 import com.codesophy.review.domain.reviews.repository.ReviewRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class ReviewServiceImpl(
-    private val reviewRepository: ReviewRepository):
-    ReviewService {
+    val reviewRepository: ReviewRepository
+): ReviewService {
+  
     override fun getAllReviewList(): List<ReviewResponse> {
         return reviewRepository.findAll().map {ReviewResponse.from(it)}
     }
@@ -33,4 +34,15 @@ class ReviewServiceImpl(
         )
         return ReviewResponse.from(review)
     }
+
+    override fun updateReview(reviewId: Long, reviewRequset: UpdateReviewRequset): ReviewResponse {
+        val savedReview = reviewRepository.save(reviewRequset.to())
+
+        return ReviewResponse.from(savedReview)
+    }
+
+    override fun deleteReview(reviewId: Long) {
+        reviewRepository.deleteById(reviewId)
+    }
+
 }
