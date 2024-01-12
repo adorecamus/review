@@ -30,12 +30,3 @@ class Review(
     var id: Long? = null
 
 }
-fun Review.toResponse(): ReviewResponse {
-    return ReviewResponse(
-        id = id!!,
-        title = title,
-        content = content,
-        username = username,
-        createdAt = createdAt
-    )
-}
