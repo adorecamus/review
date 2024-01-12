@@ -31,7 +31,7 @@ class Comment(
                 this.content = content
         }
         fun checkAuthentication(password: String){
-                if(password != this.password){
+                if (password != this.password) {
                         throw Exception("wrong authentication not comment")
                 }
         }
