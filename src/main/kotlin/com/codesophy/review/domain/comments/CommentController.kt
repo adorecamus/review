@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-@RequestMapping("/api/comments")
+@RequestMapping("/reviews/{reviewId}/comments")
 @RestController
 class CommentController(
         private val commentService: CommentService
@@ -25,9 +25,10 @@ class CommentController(
 
     @PostMapping
     fun writeComment(
+            @PathVariable reviewId: Long,
             @RequestBody writeCommentArguments: WriteCommentArguments
     ): ResponseEntity<CommentDto>{
-        val result = commentService.writeComment(writeCommentArguments)
+        val result = commentService.writeComment(reviewId, writeCommentArguments)
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(result)
@@ -35,6 +36,7 @@ class CommentController(
 
     @PutMapping("/{commentId}")
     fun updateComment(
+            @PathVariable reviewId: Long,
             @PathVariable commentId: Long,
             @RequestBody updateCommentArguments: UpdateCommentArguments
     ): ResponseEntity<CommentDto>{
@@ -42,7 +44,7 @@ class CommentController(
                 id = commentId,
                 content = updateCommentArguments.content
         )
-        val comment = commentService.updateComment(arguments)
+        val comment = commentService.updateComment(reviewId, arguments)
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -51,9 +53,10 @@ class CommentController(
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
+            @PathVariable reviewId: Long,
             @PathVariable commentId: Long
     ): ResponseEntity<Unit>{
-        commentService.deleteComment(commentId)
+        commentService.deleteComment(reviewId, commentId)
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(null)
@@ -61,6 +64,7 @@ class CommentController(
 
     @PostMapping("/{commentId}/password")
     fun checkPassword(
+            @PathVariable reviewId: Long,
             @PathVariable commentId: Long,
             @RequestBody checkPasswordArguments: CheckPasswordArguments
     ): ResponseEntity<Unit> {
@@ -68,7 +72,7 @@ class CommentController(
                 id = commentId,
                 password = checkPasswordArguments.password
         )
-        commentService.checkPassword(arguments)
+        commentService.checkPassword(reviewId, arguments)
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build()
@@ -76,11 +80,12 @@ class CommentController(
 
     @GetMapping
     fun getPaginatedCommentList(
+            @PathVariable reviewId: Long,
             @RequestParam(defaultValue = "1") pageNumber: Int,
             @RequestParam(defaultValue = "5") pageSize: Int
     ): ResponseEntity<PageResponse<CommentDto>> {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(commentService.getPaginatedCommentList(pageNumber, pageSize))
+                .body(commentService.getPaginatedCommentList(reviewId, pageNumber, pageSize))
     }
 }

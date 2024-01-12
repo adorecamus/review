@@ -1,10 +1,12 @@
 package com.codesophy.review.domain.comments
 
+import com.codesophy.review.domain.reviews.model.Review
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import java.time.ZonedDateTime
@@ -21,6 +23,8 @@ class Comment(
         val username: String,
         @Column
         val password: String,
+        @ManyToOne
+        var review : Review
 ){
 
         @CreationTimestamp
