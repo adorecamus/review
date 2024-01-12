@@ -2,6 +2,7 @@ package com.codesophy.review.domain.comments
 
 
 import com.codesophy.review.domain.comments.dtos.CommentDto
+import com.codesophy.review.domain.comments.dtos.DeleteCommentArgument
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
 import com.codesophy.review.domain.pagination.PageResponse
@@ -9,15 +10,14 @@ import com.codesophy.review.domain.pagination.PageResponse
 interface CommentService {
     fun writeComment(
             reviewId: Long,
-            writeCommentArguments: WriteCommentArguments
+            request: WriteCommentArguments
     ): CommentDto
     fun updateComment(
             reviewId: Long,
-            updateCommentArguments: UpdateCommentArguments
+            request: UpdateCommentArguments
     ): CommentDto
     fun deleteComment(
-            reviewId: Long,
-            commentId: Long
+            request: DeleteCommentArgument
     )
     fun getPaginatedCommentList(
             reviewId: Long,

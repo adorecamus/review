@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 
 data class CommentDto(
         var id: Long?,
-        val username: String,
+        val nickname: String,
         val content: String,
         val createdAt: ZonedDateTime
 ) {
@@ -13,7 +13,7 @@ data class CommentDto(
         fun from(comment: Comment): CommentDto {
             return CommentDto(
                     id = comment.id,
-                    username = comment.username,
+                    nickname = comment.user.nickname,
                     content = comment.content,
                     createdAt = comment.createdAt
             )
