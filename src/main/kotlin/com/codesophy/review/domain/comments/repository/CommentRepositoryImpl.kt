@@ -54,4 +54,19 @@ class CommentRepositoryImpl(
             .fetchOne()
             ?.let { ceil(it.toDouble() / pageSize).toInt() } ?: 0
     }
+
+    override fun countByReviewId(reviewId: Long): Long {
+        return commentJpaRepository.countByReviewId(reviewId)
+    }
+
+    override fun deleteAllByReviewId(reviewId: Long): Long {
+        val deletedCount = queryFactory
+            .delete(comment)
+            .where(comment.review.id.eq(reviewId))
+            .execute()
+
+        entityManager.clear()
+
+        return deletedCount
+    }
 }

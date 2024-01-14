@@ -42,7 +42,12 @@ class ReviewRepositoryImpl(
     }
 
     override fun deleteById(id: Long) {
-        reviewJpaRepository.deleteById(id)
+        queryFactory
+            .delete(review)
+            .where(review.id.eq(id))
+            .execute()
+
+        entityManager.clear()
     }
 
     override fun getPaginatedReviewList(
