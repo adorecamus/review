@@ -42,7 +42,10 @@ class CommentServiceImpl(
             reviewId: Long,
             request: UpdateCommentArguments
     ): CommentDto {
-        reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
+        if (!reviewJpaRepository.existsById(reviewId)) {
+            throw ModelNotFoundException("Review", reviewId)
+        }
+
         val foundComment = request.id?.let {
             commentRepository.findByIdOrNull(it)
         } ?: throw ModelNotFoundException("Comment", request.id)
