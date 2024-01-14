@@ -76,7 +76,7 @@ class CommentServiceImpl(
         validatePageRequest(pageNumber, pageSize)
 
         val totalPages = commentRepository.getTotalPages(reviewId, pageSize)
-        if (pageNumber > totalPages) {
+        if (totalPages in 1..<pageNumber) {
             throw IllegalArgumentException("Page number must not be greater than total pages")
         }
 
