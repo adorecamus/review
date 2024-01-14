@@ -23,7 +23,7 @@ class Review(
     @JoinColumn(name = "user_id")
     val user: User,
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = [CascadeType.ALL], orphanRemoval = true)
     var comments : List<Comment> = emptyList(),
 
     @CreationTimestamp
