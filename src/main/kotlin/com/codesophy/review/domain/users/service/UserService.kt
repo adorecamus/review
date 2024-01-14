@@ -8,4 +8,5 @@ import com.codesophy.review.domain.users.dto.UserDto
 interface UserService {
     fun login(loginArguments: LoginArguments): LoginDto
     fun signUp(signUpArguments: SignUpArguments): UserDto
+    fun logout(email: String)
 }
