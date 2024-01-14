@@ -57,6 +57,7 @@ class UserServiceImpl(
 
     override fun logout(email: String) {
         redisTemplate.opsForValue().get(email)?.let { redisTemplate.opsForValue().set(it, "logout") }
+        redisTemplate.delete(email)
     }
 
 }
