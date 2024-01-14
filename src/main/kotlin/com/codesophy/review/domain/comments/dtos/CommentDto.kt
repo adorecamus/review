@@ -1,6 +1,6 @@
 package com.codesophy.review.domain.comments.dtos
 
-import com.codesophy.review.domain.comments.Comment
+import com.codesophy.review.domain.comments.model.Comment
 import java.time.ZonedDateTime
 
 data class CommentDto(

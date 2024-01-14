@@ -1,9 +1,10 @@
-package com.codesophy.review.domain.users
+package com.codesophy.review.domain.users.controller
 
-import com.codesophy.review.domain.users.dtos.LoginArguments
-import com.codesophy.review.domain.users.dtos.LoginDto
-import com.codesophy.review.domain.users.dtos.SignUpArguments
-import com.codesophy.review.domain.users.dtos.UserDto
+import com.codesophy.review.domain.users.service.UserService
+import com.codesophy.review.domain.users.dto.LoginArguments
+import com.codesophy.review.domain.users.dto.LoginDto
+import com.codesophy.review.domain.users.dto.SignUpArguments
+import com.codesophy.review.domain.users.dto.UserDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

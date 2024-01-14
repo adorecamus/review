@@ -1,7 +1,7 @@
 package com.codesophy.review.domain.reviews.model
 
-import com.codesophy.review.domain.comments.Comment
-import com.codesophy.review.domain.users.User
+import com.codesophy.review.domain.comments.model.Comment
+import com.codesophy.review.domain.users.model.User
 import jakarta.persistence.*
 import java.time.ZonedDateTime
 import org.hibernate.annotations.CreationTimestamp

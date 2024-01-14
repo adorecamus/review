@@ -1,8 +1,8 @@
 package com.codesophy.review.domain.reviews.controller
 
 import com.codesophy.review.domain.pagination.CursorResponse
-import com.codesophy.review.domain.reviews.dto.*
 import com.codesophy.review.domain.reviews.service.ReviewService
+import com.codesophy.review.domain.reviews.dto.*
 import com.codesophy.review.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,7 +15,7 @@ class ReviewController(
     private val reviewService: ReviewService
 ){
     @GetMapping("/{reviewId}")
-    fun getReview(@PathVariable reviewId: Long): ResponseEntity<ReviewResponse> {
+    fun getReview(@PathVariable reviewId: Long): ResponseEntity<ReviewDto> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.getReviewById(reviewId))
@@ -23,7 +23,7 @@ class ReviewController(
     //Review 단건 조회
 
     @GetMapping
-    fun getReviewList(): ResponseEntity<List<ReviewResponse>> {
+    fun getReviewList(): ResponseEntity<List<ReviewDto>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.getAllReviewList())
@@ -33,9 +33,9 @@ class ReviewController(
     @PostMapping
     fun createReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @RequestBody createReviewRequest: CreateReviewRequest
-    ): ResponseEntity<ReviewResponse> {
-        val request = CreateReviewRequest(
+        @RequestBody createReviewRequest: CreateReviewArguments
+    ): ResponseEntity<ReviewDto> {
+        val request = CreateReviewArguments(
             title = createReviewRequest.title,
             content = createReviewRequest.content,
             userId = userPrincipal.id
@@ -50,16 +50,16 @@ class ReviewController(
     fun updateReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long,
-        @RequestBody updateReviewRequest: UpdateReviewRequest
-    ) : ResponseEntity<ReviewResponse> {
-        val request = UpdateReviewRequest(
+        @RequestBody updateReviewRequest: UpdateReviewArguments
+    ) : ResponseEntity<ReviewDto> {
+        val request = UpdateReviewArguments(
             id = reviewId,
             title = updateReviewRequest.title,
             content = updateReviewRequest.content,
             userId = userPrincipal.id
         )
 
-        val review: ReviewResponse = reviewService.updateReview(request)
+        val review: ReviewDto = reviewService.updateReview(request)
 
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -71,7 +71,7 @@ class ReviewController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long
     ): ResponseEntity<Unit> {
-        val request = DeleteReviewRequest(
+        val request = DeleteReviewArguments(
             id = reviewId,
             userId = userPrincipal.id
         )
@@ -89,7 +89,7 @@ class ReviewController(
         @RequestParam cursorId: Long?,
         @RequestParam(defaultValue = "15") pageSize: Int,
         reviewFeedArguments: ReviewFeedArguments
-    ): ResponseEntity<CursorResponse<ReviewResponse>> {
+    ): ResponseEntity<CursorResponse<ReviewDto>> {
 
         val arguments = ReviewFeedArguments(
             userId = userPrincipal.id,

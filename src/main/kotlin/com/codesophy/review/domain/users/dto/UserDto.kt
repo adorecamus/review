@@ -1,6 +1,6 @@
-package com.codesophy.review.domain.users.dtos
+package com.codesophy.review.domain.users.dto
 
-import com.codesophy.review.domain.users.User
+import com.codesophy.review.domain.users.model.User
 
 data class UserDto(
         val id: Long?,

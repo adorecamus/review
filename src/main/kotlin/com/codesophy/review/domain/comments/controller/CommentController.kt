@@ -1,13 +1,11 @@
-package com.codesophy.review.domain.comments
+package com.codesophy.review.domain.comments.controller
 
+import com.codesophy.review.domain.comments.service.CommentService
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.DeleteCommentArgument
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
 import com.codesophy.review.domain.pagination.PageResponse
-import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
-import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
-import com.codesophy.review.domain.users.UserRepository
 import com.codesophy.review.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/reviews/{reviewId}/comments")
 @RestController
 class CommentController(
-        private val commentService: CommentService,
+    private val commentService: CommentService,
 ) {
 
     @PostMapping

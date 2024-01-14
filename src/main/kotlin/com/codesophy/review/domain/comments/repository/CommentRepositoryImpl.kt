@@ -1,6 +1,6 @@
 package com.codesophy.review.domain.comments.repository
 
-import com.codesophy.review.domain.comments.Comment
+import com.codesophy.review.domain.comments.model.Comment
 import com.codesophy.review.domain.comments.QComment
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.users.QUser.user

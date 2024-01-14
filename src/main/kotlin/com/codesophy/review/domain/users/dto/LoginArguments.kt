@@ -1,4 +1,4 @@
-package com.codesophy.review.domain.users.dtos
+package com.codesophy.review.domain.users.dto
 
 data class LoginArguments(
         val email: String,

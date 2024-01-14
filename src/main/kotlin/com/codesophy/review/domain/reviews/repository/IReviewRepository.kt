@@ -1,12 +1,12 @@
 package com.codesophy.review.domain.reviews.repository
 
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.ReviewDto
 import com.codesophy.review.domain.reviews.dto.ReviewFeedArguments
 import com.codesophy.review.domain.reviews.model.Review
 
 interface IReviewRepository {
 
-    fun findAll(): List<ReviewResponse>
+    fun findAll(): List<ReviewDto>
 
     fun findByIdOrNull(id: Long): Review?
 
@@ -14,5 +14,5 @@ interface IReviewRepository {
 
     fun deleteById(id: Long)
 
-    fun getPaginatedReviewList(cursorId: Long?, size: Int, reviewFeedArguments: ReviewFeedArguments): List<ReviewResponse>
+    fun getPaginatedReviewList(cursorId: Long?, size: Int, reviewFeedArguments: ReviewFeedArguments): List<ReviewDto>
 }
