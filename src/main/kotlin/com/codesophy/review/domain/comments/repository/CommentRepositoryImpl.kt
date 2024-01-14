@@ -1,9 +1,9 @@
 package com.codesophy.review.domain.comments.repository
 
 import com.codesophy.review.domain.comments.model.Comment
-import com.codesophy.review.domain.comments.QComment
 import com.codesophy.review.domain.comments.dtos.CommentDto
-import com.codesophy.review.domain.users.QUser.user
+import com.codesophy.review.domain.comments.model.QComment
+import com.codesophy.review.domain.users.model.QUser.user
 import com.codesophy.review.infra.querydsl.QueryDslSupport
 import com.querydsl.core.types.Projections
 import org.springframework.data.repository.findByIdOrNull
