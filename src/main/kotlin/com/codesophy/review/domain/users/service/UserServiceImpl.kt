@@ -9,6 +9,7 @@ import com.codesophy.review.domain.users.dto.SignUpArguments
 import com.codesophy.review.domain.users.dto.UserDto
 import com.codesophy.review.domain.users.model.User
 import com.codesophy.review.infra.security.jwt.JwtPlugin
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder : PasswordEncoder,
-    private val jwtPlugin: JwtPlugin
+    private val jwtPlugin: JwtPlugin,
+    private val redisTemplate: RedisTemplate<String, String>
 ): UserService {
     override fun login(loginArguments: LoginArguments): LoginDto {
         val foundUser = userRepository.findByEmail(loginArguments.email) ?: throw ModelNotFoundException("User", null)
@@ -26,12 +28,16 @@ class UserServiceImpl(
             throw InvalidCredentialException()
         }
 
-        return LoginDto(
+        val loginDto = LoginDto(
                 accessToken = jwtPlugin.generateAccessToken(
                         subject = foundUser.id.toString(),
                         email = foundUser.email
                 )
         )
+
+        redisTemplate.opsForValue().set(foundUser.email, loginDto.accessToken);
+
+        return loginDto
     }
 
     override fun signUp(signUpArguments: SignUpArguments): UserDto {
@@ -48,4 +54,9 @@ class UserServiceImpl(
         )
         return UserDto.to(result)
     }
+
+    override fun logout(email: String) {
+        redisTemplate.opsForValue().get(email)?.let { redisTemplate.opsForValue().set(it, "logout") }
+    }
+
 }
