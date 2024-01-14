@@ -1,16 +1,18 @@
 package com.codesophy.review.domain.reviews.repository
 
+import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.ReviewFeedArguments
 import com.codesophy.review.domain.reviews.model.Review
 
 interface IReviewRepository {
 
-    fun findAll(): List<Review>
+    fun findAll(): List<ReviewResponse>
 
-    fun findByIdOrIdNull(id: Long): Review?
+    fun findByIdOrNull(id: Long): Review?
 
     fun save(review: Review): Review
 
     fun deleteById(id: Long)
 
-    fun getLimitedReviewsLessThanId(id: Long?, size: Int): List<Review>
+    fun getPaginatedReviewList(cursorId: Long?, size: Int, reviewFeedArguments: ReviewFeedArguments): List<ReviewResponse>
 }

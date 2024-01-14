@@ -3,10 +3,7 @@ package com.codesophy.review.domain.reviews.service
 import com.codesophy.review.domain.exception.ForbiddenException
 import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.CursorResponse
-import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
-import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
-import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
+import com.codesophy.review.domain.reviews.dto.*
 import com.codesophy.review.domain.reviews.model.Review
 import com.codesophy.review.domain.reviews.repository.IReviewRepository
 import com.codesophy.review.domain.users.UserRepository
@@ -20,11 +17,11 @@ class ReviewServiceImpl(
 ) : ReviewService {
 
     override fun getAllReviewList(): List<ReviewResponse> {
-        return reviewRepository.findAll().map { ReviewResponse.from(it) }
+        return reviewRepository.findAll()
     }
 
     override fun getReviewById(reviewId: Long): ReviewResponse {
-        val review = reviewRepository.findByIdOrIdNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
         return ReviewResponse.from(review)
     }
@@ -48,7 +45,7 @@ class ReviewServiceImpl(
     override fun updateReview(request: UpdateReviewRequest): ReviewResponse {
 
         val foundReview = request.id?.let {
-            reviewRepository.findByIdOrIdNull(it)
+            reviewRepository.findByIdOrNull(it)
         } ?: throw ModelNotFoundException("Review", request.id)
 
         if (!foundReview.compareUserIdWith(request.userId!!)) {
@@ -64,7 +61,7 @@ class ReviewServiceImpl(
     override fun deleteReview(request: DeleteReviewRequest) {
 
         val foundReview = request.id?.let {
-            reviewRepository.findByIdOrIdNull(it)
+            reviewRepository.findByIdOrNull(it)
         } ?: throw ModelNotFoundException("Review", request.id)
 
         if (!foundReview.compareUserIdWith(request.userId)) {
@@ -74,17 +71,22 @@ class ReviewServiceImpl(
         reviewRepository.deleteById(foundReview.id!!)
     }
 
-    override fun getPaginatedReviewList(cursorId: Long?, pageSize: Int): CursorResponse<ReviewResponse> {
-        val list = reviewRepository.getLimitedReviewsLessThanId(cursorId, pageSize + 1).toMutableList()
-        val hasNext = checkLastPage(pageSize, list)
+    override fun getPaginatedReviewList(
+        cursorId: Long?,
+        pageSize: Int,
+        reviewFeedArguments: ReviewFeedArguments
+    ): CursorResponse<ReviewResponse> {
+
+        val list = reviewRepository.getPaginatedReviewList(cursorId, pageSize + 1, reviewFeedArguments).toMutableList()
+        val hasNext = checkLastPage(pageSize, list.size)
         if (hasNext) {
             list.removeAt(pageSize)
         }
-        return CursorResponse(list.map { ReviewResponse.from(it) }, hasNext)
+        return CursorResponse(list, hasNext)
     }
 
-    private fun checkLastPage(pageSize: Int, list: MutableList<Review>): Boolean {
-        return list.size > pageSize
+    private fun checkLastPage(pageSize: Int, listSize: Int): Boolean {
+        return listSize > pageSize
     }
 
 }

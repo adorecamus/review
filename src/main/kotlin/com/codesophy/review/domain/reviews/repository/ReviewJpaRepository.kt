@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ReviewJpaRepository: JpaRepository<Review, Long> {
 
-    fun findByIdOrIdNull(id: Long): Review?
+    fun findByIdOrNull(id: Long): Review?
 }

@@ -2,7 +2,10 @@ package com.codesophy.review.domain.comments.repository
 
 import com.codesophy.review.domain.comments.Comment
 import com.codesophy.review.domain.comments.QComment
+import com.codesophy.review.domain.comments.dtos.CommentDto
+import com.codesophy.review.domain.users.QUser.user
 import com.codesophy.review.infra.querydsl.QueryDslSupport
+import com.querydsl.core.types.Projections
 import org.springframework.data.repository.findByIdOrNull
 import kotlin.math.ceil
 
@@ -24,18 +27,30 @@ class CommentRepositoryImpl(
         return commentJpaRepository.deleteById(id)
     }
 
-    override fun getListByPageNumberAndPageSize(pageNumber: Int, pageSize: Int): List<Comment> {
-        return queryFactory.selectFrom(comment)
+    override fun getListByPageNumberAndPageSize(reviewId: Long, pageNumber: Int, pageSize: Int): List<CommentDto> {
+        return queryFactory.select(
+            Projections.constructor(
+                CommentDto::class.java,
+                comment.id,
+                user.nickname,
+                comment.content,
+                comment.createdAt
+            )
+        )
+            .from(comment)
+            .leftJoin(comment.user, user)
+            .where(comment.review.id.eq(reviewId))
             .offset(((pageNumber - 1) * pageSize).toLong())
             .limit(pageSize.toLong())
             .orderBy(comment.id.desc())
             .fetch()
     }
 
-    override fun getTotalPages(pageSize: Int): Int {
+    override fun getTotalPages(reviewId: Long, pageSize: Int): Int {
         return queryFactory
             .select(comment.count())
             .from(comment)
+            .where(comment.review.id.eq(reviewId))
             .fetchOne()
             ?.let { ceil(it.toDouble() / pageSize).toInt() } ?: 0
     }

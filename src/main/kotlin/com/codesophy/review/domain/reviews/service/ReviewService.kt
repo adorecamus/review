@@ -1,10 +1,7 @@
 package com.codesophy.review.domain.reviews.service
 
 import com.codesophy.review.domain.pagination.CursorResponse
-import com.codesophy.review.domain.reviews.dto.CreateReviewRequest
-import com.codesophy.review.domain.reviews.dto.DeleteReviewRequest
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
-import com.codesophy.review.domain.reviews.dto.UpdateReviewRequest
+import com.codesophy.review.domain.reviews.dto.*
 
 interface ReviewService {
     fun getAllReviewList(): List<ReviewResponse>
@@ -17,5 +14,10 @@ interface ReviewService {
 
     fun deleteReview(request: DeleteReviewRequest)
 
-    fun getPaginatedReviewList(cursorId: Long?, pageSize: Int): CursorResponse<ReviewResponse>
+    fun getPaginatedReviewList(
+        cursorId: Long?,
+        pageSize: Int,
+        reviewFeedArguments: ReviewFeedArguments
+    ): CursorResponse<ReviewResponse>
+
 }
