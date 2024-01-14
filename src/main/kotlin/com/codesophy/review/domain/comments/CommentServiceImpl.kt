@@ -69,17 +69,19 @@ class CommentServiceImpl(
     }
 
     override fun getPaginatedCommentList(reviewId: Long, pageNumber: Int, pageSize: Int): PageResponse<CommentDto> {
-        reviewJpaRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
+        if (!reviewJpaRepository.existsById(reviewId)) {
+            throw ModelNotFoundException("Review", reviewId)
+        }
+
         validatePageRequest(pageNumber, pageSize)
 
-        val totalPages = commentRepository.getTotalPages(pageSize)
+        val totalPages = commentRepository.getTotalPages(reviewId, pageSize)
         if (pageNumber > totalPages) {
             throw IllegalArgumentException("Page number must not be greater than total pages")
         }
 
         return PageResponse(
-                dtoList = commentRepository.getListByPageNumberAndPageSize(pageNumber, pageSize)
-                            .map { CommentDto.from(it) },
+                dtoList = commentRepository.getListByPageNumberAndPageSize(reviewId, pageNumber, pageSize),
                 totalPages = totalPages
         )
     }

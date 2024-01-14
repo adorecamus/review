@@ -1,6 +1,7 @@
 package com.codesophy.review.domain.comments.repository
 
 import com.codesophy.review.domain.comments.Comment
+import com.codesophy.review.domain.comments.dtos.CommentDto
 
 interface ICommentRepository {
 
@@ -10,7 +11,7 @@ interface ICommentRepository {
 
     fun deleteById(id: Long)
 
-    fun getListByPageNumberAndPageSize(pageNumber: Int, pageSize: Int): List<Comment>
+    fun getListByPageNumberAndPageSize(reviewId: Long, pageNumber: Int, pageSize: Int): List<CommentDto>
 
-    fun getTotalPages(pageSize: Int): Int
+    fun getTotalPages(reviewId: Long, pageSize: Int): Int
 }
