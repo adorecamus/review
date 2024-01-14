@@ -8,7 +8,7 @@ interface IReviewRepository {
 
     fun findAll(): List<ReviewResponse>
 
-    fun findByIdOrIdNull(id: Long): Review?
+    fun findByIdOrNull(id: Long): Review?
 
     fun save(review: Review): Review
 

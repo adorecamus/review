@@ -21,7 +21,7 @@ class ReviewServiceImpl(
     }
 
     override fun getReviewById(reviewId: Long): ReviewResponse {
-        val review = reviewRepository.findByIdOrIdNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
         return ReviewResponse.from(review)
     }
@@ -45,7 +45,7 @@ class ReviewServiceImpl(
     override fun updateReview(request: UpdateReviewRequest): ReviewResponse {
 
         val foundReview = request.id?.let {
-            reviewRepository.findByIdOrIdNull(it)
+            reviewRepository.findByIdOrNull(it)
         } ?: throw ModelNotFoundException("Review", request.id)
 
         if (!foundReview.compareUserIdWith(request.userId!!)) {
@@ -61,7 +61,7 @@ class ReviewServiceImpl(
     override fun deleteReview(request: DeleteReviewRequest) {
 
         val foundReview = request.id?.let {
-            reviewRepository.findByIdOrIdNull(it)
+            reviewRepository.findByIdOrNull(it)
         } ?: throw ModelNotFoundException("Review", request.id)
 
         if (!foundReview.compareUserIdWith(request.userId)) {

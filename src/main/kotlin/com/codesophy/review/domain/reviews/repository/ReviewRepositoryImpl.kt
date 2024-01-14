@@ -32,8 +32,8 @@ class ReviewRepositoryImpl(
             .fetch()
     }
 
-    override fun findByIdOrIdNull(id: Long): Review? {
-        return reviewJpaRepository.findByIdOrIdNull(id)
+    override fun findByIdOrNull(id: Long): Review? {
+        return reviewJpaRepository.findByIdOrNull(id)
     }
 
     override fun save(review: Review): Review {
