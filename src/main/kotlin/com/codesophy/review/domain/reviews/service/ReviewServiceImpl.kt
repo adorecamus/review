@@ -6,7 +6,7 @@ import com.codesophy.review.domain.pagination.CursorResponse
 import com.codesophy.review.domain.reviews.dto.*
 import com.codesophy.review.domain.reviews.model.Review
 import com.codesophy.review.domain.reviews.repository.IReviewRepository
-import com.codesophy.review.domain.users.UserRepository
+import com.codesophy.review.domain.users.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -16,17 +16,17 @@ class ReviewServiceImpl(
     private val userRepository: UserRepository
 ) : ReviewService {
 
-    override fun getAllReviewList(): List<ReviewResponse> {
+    override fun getAllReviewList(): List<ReviewDto> {
         return reviewRepository.findAll()
     }
 
-    override fun getReviewById(reviewId: Long): ReviewResponse {
+    override fun getReviewById(reviewId: Long): ReviewDto {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
-        return ReviewResponse.from(review)
+        return ReviewDto.from(review)
     }
 
-    override fun createReview(request: CreateReviewRequest): ReviewResponse {
+    override fun createReview(request: CreateReviewArguments): ReviewDto {
 
         val user = request.userId?.let {
             userRepository.findByIdOrNull(it)
@@ -39,10 +39,10 @@ class ReviewServiceImpl(
                 user = user
             )
         )
-        return ReviewResponse.from(review)
+        return ReviewDto.from(review)
     }
 
-    override fun updateReview(request: UpdateReviewRequest): ReviewResponse {
+    override fun updateReview(request: UpdateReviewArguments): ReviewDto {
 
         val foundReview = request.id?.let {
             reviewRepository.findByIdOrNull(it)
@@ -55,10 +55,10 @@ class ReviewServiceImpl(
         foundReview.changeTitleAndContent(request.title, request.content)
         reviewRepository.save(foundReview)
 
-        return ReviewResponse.from(foundReview)
+        return ReviewDto.from(foundReview)
     }
 
-    override fun deleteReview(request: DeleteReviewRequest) {
+    override fun deleteReview(request: DeleteReviewArguments) {
 
         val foundReview = request.id?.let {
             reviewRepository.findByIdOrNull(it)
@@ -75,7 +75,7 @@ class ReviewServiceImpl(
         cursorId: Long?,
         pageSize: Int,
         reviewFeedArguments: ReviewFeedArguments
-    ): CursorResponse<ReviewResponse> {
+    ): CursorResponse<ReviewDto> {
 
         val list = reviewRepository.getPaginatedReviewList(cursorId, pageSize + 1, reviewFeedArguments).toMutableList()
         val hasNext = checkLastPage(pageSize, list.size)

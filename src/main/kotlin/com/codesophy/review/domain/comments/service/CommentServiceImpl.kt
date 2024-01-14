@@ -1,16 +1,16 @@
-package com.codesophy.review.domain.comments
+package com.codesophy.review.domain.comments.service
 
 import com.codesophy.review.domain.comments.dtos.CommentDto
 import com.codesophy.review.domain.comments.dtos.DeleteCommentArgument
 import com.codesophy.review.domain.comments.dtos.UpdateCommentArguments
 import com.codesophy.review.domain.comments.dtos.WriteCommentArguments
-import com.codesophy.review.domain.comments.repository.CommentJpaRepository
+import com.codesophy.review.domain.comments.model.Comment
 import com.codesophy.review.domain.comments.repository.ICommentRepository
 import com.codesophy.review.domain.exception.ForbiddenException
 import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.PageResponse
 import com.codesophy.review.domain.reviews.repository.ReviewJpaRepository
-import com.codesophy.review.domain.users.UserRepository
+import com.codesophy.review.domain.users.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 

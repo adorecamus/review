@@ -1,4 +1,4 @@
-package com.codesophy.review.domain.users
+package com.codesophy.review.domain.users.model
 
 import jakarta.persistence.*
 

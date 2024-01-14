@@ -1,4 +1,4 @@
-package com.codesophy.review.domain.comments
+package com.codesophy.review.domain.comments.service
 
 
 import com.codesophy.review.domain.comments.dtos.CommentDto

@@ -4,20 +4,20 @@ import com.codesophy.review.domain.pagination.CursorResponse
 import com.codesophy.review.domain.reviews.dto.*
 
 interface ReviewService {
-    fun getAllReviewList(): List<ReviewResponse>
+    fun getAllReviewList(): List<ReviewDto>
 
-    fun getReviewById(reviewId: Long): ReviewResponse
+    fun getReviewById(reviewId: Long): ReviewDto
 
-    fun createReview(request: CreateReviewRequest): ReviewResponse
+    fun createReview(request: CreateReviewArguments): ReviewDto
 
-    fun updateReview(request: UpdateReviewRequest): ReviewResponse
+    fun updateReview(request: UpdateReviewArguments): ReviewDto
 
-    fun deleteReview(request: DeleteReviewRequest)
+    fun deleteReview(request: DeleteReviewArguments)
 
     fun getPaginatedReviewList(
         cursorId: Long?,
         pageSize: Int,
         reviewFeedArguments: ReviewFeedArguments
-    ): CursorResponse<ReviewResponse>
+    ): CursorResponse<ReviewDto>
 
 }

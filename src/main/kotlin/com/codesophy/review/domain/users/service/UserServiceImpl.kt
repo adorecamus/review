@@ -1,11 +1,13 @@
-package com.codesophy.review.domain.users
+package com.codesophy.review.domain.users.service
 
 import com.codesophy.review.domain.exception.InvalidCredentialException
 import com.codesophy.review.domain.exception.ModelNotFoundException
-import com.codesophy.review.domain.users.dtos.LoginArguments
-import com.codesophy.review.domain.users.dtos.LoginDto
-import com.codesophy.review.domain.users.dtos.SignUpArguments
-import com.codesophy.review.domain.users.dtos.UserDto
+import com.codesophy.review.domain.users.repository.UserRepository
+import com.codesophy.review.domain.users.dto.LoginArguments
+import com.codesophy.review.domain.users.dto.LoginDto
+import com.codesophy.review.domain.users.dto.SignUpArguments
+import com.codesophy.review.domain.users.dto.UserDto
+import com.codesophy.review.domain.users.model.User
 import com.codesophy.review.infra.security.jwt.JwtPlugin
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -13,9 +15,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-        private val userRepository: UserRepository,
-        private val passwordEncoder : PasswordEncoder,
-        private val jwtPlugin: JwtPlugin
+    private val userRepository: UserRepository,
+    private val passwordEncoder : PasswordEncoder,
+    private val jwtPlugin: JwtPlugin
 ): UserService {
     override fun login(loginArguments: LoginArguments): LoginDto {
         val foundUser = userRepository.findByEmail(loginArguments.email) ?: throw ModelNotFoundException("User", null)
@@ -37,11 +39,13 @@ class UserServiceImpl(
             throw IllegalStateException("Email is already in use")
         }
 
-        val result = userRepository.save(User(
+        val result = userRepository.save(
+            User(
                 email = signUpArguments.email,
                 password = passwordEncoder.encode(signUpArguments.password),// 암호화
                 nickname = signUpArguments.nickname
-        ))
+        )
+        )
         return UserDto.to(result)
     }
 }

@@ -1,6 +1,6 @@
 package com.codesophy.review.domain.reviews.repository
 
-import com.codesophy.review.domain.reviews.dto.ReviewResponse
+import com.codesophy.review.domain.reviews.dto.ReviewDto
 import com.codesophy.review.domain.reviews.dto.ReviewFeedArguments
 import com.codesophy.review.domain.reviews.model.QReview
 import com.codesophy.review.domain.reviews.model.Review
@@ -15,11 +15,11 @@ class ReviewRepositoryImpl(
 
     private val review = QReview.review
 
-    override fun findAll(): List<ReviewResponse> {
+    override fun findAll(): List<ReviewDto> {
 
         return queryFactory.select(
             Projections.constructor(
-                ReviewResponse::class.java,
+                ReviewDto::class.java,
                 review.id,
                 review.title,
                 review.content,
@@ -48,7 +48,7 @@ class ReviewRepositoryImpl(
         cursorId: Long?,
         size: Int,
         reviewFeedArguments: ReviewFeedArguments
-    ): List<ReviewResponse> {
+    ): List<ReviewDto> {
 
         val booleanBuilder = BooleanBuilder()
         cursorId?.let { booleanBuilder.and(review.id.lt(it)) }
@@ -58,7 +58,7 @@ class ReviewRepositoryImpl(
 
         return queryFactory.select(
             Projections.constructor(
-                ReviewResponse::class.java,
+                ReviewDto::class.java,
                 review.id,
                 review.title,
                 review.content,
