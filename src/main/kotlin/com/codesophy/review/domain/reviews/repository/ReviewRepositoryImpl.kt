@@ -4,10 +4,11 @@ import com.codesophy.review.domain.reviews.dto.ReviewDto
 import com.codesophy.review.domain.reviews.dto.ReviewFeedArguments
 import com.codesophy.review.domain.reviews.model.QReview
 import com.codesophy.review.domain.reviews.model.Review
-import com.codesophy.review.domain.users.QUser.user
+import com.codesophy.review.domain.users.model.QUser.user
 import com.codesophy.review.infra.querydsl.QueryDslSupport
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Projections
+import org.springframework.data.repository.findByIdOrNull
 
 class ReviewRepositoryImpl(
     private val reviewJpaRepository: ReviewJpaRepository
@@ -41,7 +42,12 @@ class ReviewRepositoryImpl(
     }
 
     override fun deleteById(id: Long) {
-        reviewJpaRepository.deleteById(id)
+        queryFactory
+            .delete(review)
+            .where(review.id.eq(id))
+            .execute()
+
+        entityManager.clear()
     }
 
     override fun getPaginatedReviewList(

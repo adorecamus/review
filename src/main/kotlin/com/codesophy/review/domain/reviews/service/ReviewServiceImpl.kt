@@ -1,5 +1,6 @@
 package com.codesophy.review.domain.reviews.service
 
+import com.codesophy.review.domain.comments.repository.ICommentRepository
 import com.codesophy.review.domain.exception.ForbiddenException
 import com.codesophy.review.domain.exception.ModelNotFoundException
 import com.codesophy.review.domain.pagination.CursorResponse
@@ -9,11 +10,13 @@ import com.codesophy.review.domain.reviews.repository.IReviewRepository
 import com.codesophy.review.domain.users.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReviewServiceImpl(
     private val reviewRepository: IReviewRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val commentRepository: ICommentRepository
 ) : ReviewService {
 
     override fun getAllReviewList(): List<ReviewDto> {
@@ -58,6 +61,7 @@ class ReviewServiceImpl(
         return ReviewDto.from(foundReview)
     }
 
+    @Transactional
     override fun deleteReview(request: DeleteReviewArguments) {
 
         val foundReview = request.id?.let {
@@ -66,6 +70,12 @@ class ReviewServiceImpl(
 
         if (!foundReview.compareUserIdWith(request.userId)) {
             throw ForbiddenException(request.userId, "Review", request.id)
+        }
+
+        val count = commentRepository.countByReviewId(foundReview.id!!)
+        val deletedCount = commentRepository.deleteAllByReviewId(foundReview.id!!)
+        if (count != deletedCount) {
+            throw IllegalStateException("Deleted count does not match")
         }
 
         reviewRepository.deleteById(foundReview.id!!)

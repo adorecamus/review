@@ -14,4 +14,8 @@ interface ICommentRepository {
     fun getListByPageNumberAndPageSize(reviewId: Long, pageNumber: Int, pageSize: Int): List<CommentDto>
 
     fun getTotalPages(reviewId: Long, pageSize: Int): Int
+
+    fun countByReviewId(reviewId: Long): Long
+
+    fun deleteAllByReviewId(reviewId: Long): Long
 }
